@@ -16,24 +16,26 @@ Libraries
 
 Ensuring broad compatibility across such a wide range of browserse basically requires updating them all to modern day JS Environments.  To that end, the following additional libraries are employed:
 
-- core-js
-- console-polyfill
-- html5shiv
+- [core-js](https://www.npmjs.com/package/core-js)
+- [console-polyfill](https://www.npmjs.com/package/console-polyfill)
+- [html5shiv](https://www.npmjs.com/package/html5shiv)
 
 
 ### Functionality
 
-- Classnames to build CSS classname lists in a more JSlike fashion.
-- JSON3 for faster and more consistent JSON handling across all browsers.
+- [classnames](https://www.npmjs.com/package/classnames) to build CSS classname lists in a more JSlike fashion.
+- [JSON3](https://www.npmjs.com/package/json3) for faster and more consistent JSON handling across all browsers.
 - [Redux](http://redux.js.org/) to store app state in a central state atom.
-- ReduxThunk for middleware supporting dispatching functions which themselves dispatch actual actions later.
-- ReduxLogger for middleware to log all actions dispatched the mutations they result in.
+- [ReduxThunk](https://www.npmjs.com/package/redux-thunk) for middleware supporting dispatching functions which themselves asynchronously dispatch actual actions later.
+	- See [This StackOverflow answer](http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559) for some detailed explanation.
+	- See [the Async Actions section of the Redux Tutorial](http://redux.js.org/docs/advanced/AsyncActions.html) for a more step-by-step use of ReduxThunk.
+- [ReduxLogger](https://www.npmjs.com/package/redux-logger) for middleware to log all actions dispatched the mutations they result in during development.
 - [Reselect](https://github.com/reactjs/reselect) for derived data.
 
 
 ### Other Libraries
 
-These are other things you might use ir your project, depending on what you want/need.
+These are other things you might use in your project, depending on what you want/need.
 
 - [ImmutableJS](https://facebook.github.io/immutable-js) for immutable collections that are easier to work with.  (`List#push` that returns a the new list, e.g.)
 - [React Bootstrap](https://react-bootstrap.github.io/) for pre-made React Bootstrap components.
