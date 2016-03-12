@@ -77,7 +77,8 @@ gulp.task( 'build-preloader', () => {
 			presets: [ 'es2015', 'react', 'stage-0' ]
 		})
 		.transform( es3ify )
-		.add( config.preloaderEntry );
+		.add( config.preloaderEntry )
+		.external( config.appEntryModuleId )
 		;
 
 	let outputStream = bundler.bundle()
