@@ -133,6 +133,8 @@ Although technically, the given Flux Utils can be made to work in an ES3 environ
 
 ImmutableJS isn't included here as it's both orthogonal to this skeleton and installation and use is dead simple.  If you do want to use ImmutableJS in IE8 and other ES3 environments, though, about the only real caveat is that you cannot use property access to get Records' fields as ES3 does not support getters/setters, meaning you must always use `record.get()` and `record.set()`.
 
+Additionally, due to sticking to the `es2015` Babel preset, you cannot readily use ES6 class extensions is ES3 environments since you'd have to enable loose classes, which itself requires ditching that Babel preset and including all of the plugins in it.  This means you cannot easily add Flow type checking to your Records by first creating a Record class with defaults as normal then subclassing that to add typing.
+
 
 ### ES6 in Enterprise Environments (ES3)
 
