@@ -45,6 +45,11 @@ These are other things you might use in your project, depending on what you want
 Other Features
 --------------
 
+### Tests
+
+Testing is good.  This just has Mocha as a starting point.  Spec files are put in the `/test` dir.  Note how reducers are very easy to test!
+
+
 ### Preloader
 
 When you need to use a preloader with some sort of progress indicator, ReactJS is a pretty large library, there's an option in the Gulpfile to treat the app entry file as another require rather than a Browserify entry point so that you can `require()` your app's entry point after you're certain everything is loaded.
