@@ -4,9 +4,58 @@ const uglify = require( 'gulp-uglify' );
 
 const production = (process.env.NODE_ENV == 'production');
 
+exports.bundler = browserifyBundler;
 exports.getBowerPackageIds = getBowerPackageIds;
 exports.getNPMPackageIds = getNPMPackageIds;
 exports.getConfiguredUglify = getConfiguredUglify;
+
+function browserifyBundler( options ) {
+	options = Object.assign({
+		babelify: true,
+		es3ify: false,
+		debug: false,
+		vendor: false,
+		appEntry: '',
+		appEntryModuleId: '',
+	}, options );
+
+	let bundler = browserify({
+		debug: options.debug,
+	});
+
+	if( options.babelify ) {
+		bundler.transform( babelify );
+	}
+
+	if( options.es3ify ) {
+		bundler.transform( es3ify );
+	}
+
+	if( options.appEntry ) {
+		if( options.appEntryModuleId ) {
+			bundler.require( options.appEntry, { expose: options.appEntryModuleId });
+		}
+		else {
+			bundler.add( options.appEntry );
+		}
+	}
+
+	if( options.vendor ) {
+		getBowerPackageIds().forEach( id => {
+			bundler[ libRefMethod ]( bowerResolve.fastReadSync( id ), { expose: id });
+		});
+
+		getNPMPackageIds().forEach( id => {
+			bundler.require( nodeResolve.sync( id ), { expose: id });
+		});
+	}
+	else {
+		getBowerPackageIds().forEach( id => { bundler.external( id ) });
+		getNPMPackageIds().forEach( id => { bundler.external( id ) });
+	}
+
+	return bundler;
+}
 
 function getBowerPackageIds() {
 	let bowerManifest = {};

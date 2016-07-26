@@ -24,7 +24,7 @@ const helpers = require( './gulpfile.helpers' );
 //////// Config
 
 // Use environment variable rather than `gulp --type=production`.
-const production = (process.env.NODE_ENV == 'production');
+const buildEnv = (process.env.NODE_ENV == 'production');
 
 const config = {};
 
@@ -75,24 +75,9 @@ gulp.task( 'watch', () => {
 gulp.task( 'build-scripts', [ 'build-app', 'build-vendor' ]);
 
 gulp.task( 'build-vendor', () => {
-	var bundler = browserify({
-			debug: ! production
-		})
-		// TODO: AFAIK Browserify doesn't apply transforms to node_modules.
-		// Check if that's actually the case here.  If so, I can omit these.
-		// However, I also seem to recall es3ify making a difference, so.
-		.transform( babelify, {
-			presets: [ 'es2015', 'react', 'stage-0' ]
-		})
-		.transform( es3ify )
-		;
-
-	helpers.getBowerPackageIds().forEach( id => {
-		bundler.require( bowerResolve.fastReadSync( id ), { expose: id });
-	});
-
-	helpers.getNPMPackageIds().forEach( id => {
-		bundler.require( nodeResolve.sync( id ), { expose: id });
+	var bundler = helpers.bundler({
+		vendor: true,
+		debug: buildEnv !== 'production',
 	});
 
 	let bufferedStream = bundler.bundle()
@@ -128,37 +113,32 @@ gulp.task( 'build-vendor', () => {
 });
 
 gulp.task( 'build-app', () => {
-	let bundler = browserify({
-			debug: ! production
-		})
-		.transform( babelify, {
-			presets: [ 'es2015', 'react', 'stage-0' ]
-		})
-		.transform( es3ify )
-		;
-
-	if( config.automaticallyEnterApp ) {
-		bundler.add( config.appEntry );
-	}
-	else {
-		bundler.require( config.appEntry, { expose: config.appEntryModuleId });
-	}
-
-	helpers.getBowerPackageIds().forEach( id => {
-		bundler.external( id );
-	});
-
-	helpers.getNPMPackageIds().forEach( id => {
-		bundler.external( id );
+	let bundler = helpers.bundler({
+		debug: buildEnv !== 'production',
 	});
 
 	let outputStream = bundler.bundle()
+		// Browserify Errors.
+		.on( 'error', err => {
+			gutil.log( err.message );
+			this.emit( 'end' );
+		})
 		.pipe( source( config.appBundleName ) )
 		.pipe( buffer() )
 		.pipe( sourcemaps.init({
 			loadMaps: true
 		}))
 		.pipe( helpers.getConfiguredUglify() )
+		// Uglify Errors.
+		.on( 'error', err => {
+			gutil.log( err.message );
+
+			if( err.fileName && err.lineNumber ) {
+				console.error( `location: ${ err.fileName }:${ err.lineNumber }` );
+			}
+
+			this.emit( 'end' );
+		})
 		.pipe( sourcemaps.write( config.appSourcemapsRelativeDest ) )
 		.pipe( gulp.dest( config.public ) )
 		;
