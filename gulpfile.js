@@ -11,11 +11,6 @@ const sourcemaps = require( 'gulp-sourcemaps' );
 
 const source = require( 'vinyl-source-stream' );
 const buffer = require( 'vinyl-buffer' );
-const browserify = require( 'browserify' );
-const babelify = require( 'babelify' );
-const es3ify = require( 'es3ify' );
-const bowerResolve = require( 'bower-resolve' );
-const nodeResolve = require( 'resolve' );
 
 const helpers = require( './gulpfile.helpers' );
 
@@ -78,6 +73,7 @@ gulp.task( 'build-vendor', () => {
 	var bundler = helpers.bundler({
 		vendor: true,
 		debug: buildEnv !== 'production',
+		es3ify: true
 	});
 
 	let bufferedStream = bundler.bundle()
@@ -115,6 +111,7 @@ gulp.task( 'build-vendor', () => {
 gulp.task( 'build-app', () => {
 	let bundler = helpers.bundler({
 		debug: buildEnv !== 'production',
+		es3ify: true
 	});
 
 	let outputStream = bundler.bundle()

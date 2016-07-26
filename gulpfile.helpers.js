@@ -1,6 +1,11 @@
 'use strict';
 
 const uglify = require( 'gulp-uglify' );
+const bowerResolve = require( 'bower-resolve' );
+const nodeResolve = require( 'resolve' );
+const browserify = require( 'browserify' );
+const babelify = require( 'babelify' );
+const es3ify = require( 'es3ify' );
 
 const production = (process.env.NODE_ENV == 'production');
 
@@ -42,7 +47,7 @@ function browserifyBundler( options ) {
 
 	if( options.vendor ) {
 		getBowerPackageIds().forEach( id => {
-			bundler[ libRefMethod ]( bowerResolve.fastReadSync( id ), { expose: id });
+			bundler.require( bowerResolve.fastReadSync( id ), { expose: id });
 		});
 
 		getNPMPackageIds().forEach( id => {
