@@ -1,7 +1,7 @@
 {
-  "name": "skeleton-react-redux-ie8",
+  "name": "skeleton-react-redux",
   "version": "0.0.0",
-  "description": "Base Skeleton for creating React/Redux apps with an eye towards IE8 compatibility to target enterprise environments.",
+  "description": "Base Skeleton for creating React/Redux apps.",
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register",

@@ -55,25 +55,32 @@ config.appSourcemapsRelativeDest = './';
 
 ////////
 
-gulp.task( 'default', [ 'build-scripts', 'build-assets' ]);
+gulp.task( 'default', [ 'app' ]);
 
 gulp.task( 'watch', () => {
-	gulp.watch( config.appWatch, [ 'build-app' ]);
-	gulp.watch( config.appAssetsWatch, [ 'build-assets' ]);
-})
+	gulp.watch( config.appWatch, [ 'app:scripts:app' ]);
+	gulp.watch( config.appAssetsWatch, [ 'app:assets' ]);
+});
+
+////
+
+gulp.task( 'app', [
+	'app:scripts',
+	'app:assets',
+]);
 
 
 
 //// Scripts
 
 // also add a preloader here if using one of those.
-gulp.task( 'build-scripts', [ 'build-app', 'build-vendor' ]);
+gulp.task( 'app:scripts', [ 'app:scripts:app', 'app:scripts:vendor' ]);
 
-gulp.task( 'build-vendor', () => {
+gulp.task( 'app:scripts:vendor', () => {
 	var bundler = helpers.bundler({
 		vendor: true,
 		debug: buildEnv !== 'production',
-		es3ify: true
+		babelify: false,
 	});
 
 	let bufferedStream = bundler.bundle()
@@ -108,10 +115,9 @@ gulp.task( 'build-vendor', () => {
 	return outputStream;
 });
 
-gulp.task( 'build-app', () => {
+gulp.task( 'app:scripts:app', () => {
 	let bundler = helpers.bundler({
 		debug: buildEnv !== 'production',
-		es3ify: true
 	});
 
 	let outputStream = bundler.bundle()
@@ -147,7 +153,7 @@ gulp.task( 'build-app', () => {
 
 //// Assets
 
-gulp.task( 'build-assets', () => {
+gulp.task( 'app:assets', () => {
 	gulp.src( config.appAssets, { base: config.appAssetsBase })
 		.pipe( gulp.dest( config.public ) )
 		;

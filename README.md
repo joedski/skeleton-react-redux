@@ -1,9 +1,7 @@
-Skeleton: React+Redux in IE8
-============================
+Skeleton: React+Redux
+=====================
 
-A jumping-off point for creating React+Redux apps that support IE8.  To this end, it is locked to version 0.14.x of ReactJS.  Redux, being more or less just a pile of functions, doesn't have to worry as much about IE8's ES3 environment, unlike with FluxUtils.
-
-Additionally, in a properly configured environment, this should provide ESLint-based linting and Flow type checking right off the bat.
+A jumping-off point for creating React+Redux apps.
 
 The Gulpfile is largely taken from [sogko's _Browserify: Separating App and Vendor Bundles_ recipe](https://github.com/sogko/gulp-recipes/tree/master/browserify-separating-app-and-vendor-bundles).
 
@@ -14,11 +12,11 @@ Libraries
 
 ### Compatibility
 
-Ensuring broad compatibility across such a wide range of browserse basically requires updating them all to modern day JS Environments.  To that end, the following additional libraries are employed:
+Unlike with my [React+Redux IE8 Skeleton](https://github.com/joedski/skeleton-react-redux-ie8), this one has no special provisions for broad compatibility, being made for quickly starting apps in modern browsers.
 
-- [core-js](https://www.npmjs.com/package/core-js)
-- [console-polyfill](https://www.npmjs.com/package/console-polyfill)
-- [html5shiv](https://www.npmjs.com/package/html5shiv)
+Some suggestions:
+- If you want to use Generators, include the `babel-polyfill`, which includes a custom Generator runtime and `core-js`.
+- If you want just `core-js`, well, just use `core-js`.
 
 
 ### Functionality
